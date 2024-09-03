@@ -105,18 +105,35 @@ def extract_frames_by_seconds(video_path):
     cap = cv2.VideoCapture(video_path)
     fps = cap.get(cv2.CAP_PROP_FPS)
     frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    try:
-        duration = frame_count / fps
-    except:
-        duration = frame_count / 24
-    for sec in range(int(duration) + 1):
-        cap.set(cv2.CAP_PROP_POS_MSEC, sec * 1000)
+    if fps == 0: # Fallback if fps is 0 or not available
+        fps = 24
+    #duration = frame_count / fps
+    for i in range(0, frame_count, int(fps)):  # Grab a frame every second
+    #for sec in range(int(duration) + 1):
+        #cap.set(cv2.CAP_PROP_POS_MSEC, sec * 1000)
+        cap.set(cv2.CAP_PROP_POS_FRAMES, i)
         ret, frame = cap.read()
         if ret:
             frames.append((sec, frame))
     cap.release()
     return frames
 
+
+def extract_frames_by_frame_number(video_path):
+    frames = []
+    cap = cv2.VideoCapture(video_path)
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+    for i in range(0, frame_count, int(fps)):  # Grab a frame every second
+        cap.set(cv2.CAP_PROP_POS_FRAMES, i)
+        ret, frame = cap.read()
+        if ret:
+            frames.append((i / fps, frame))
+        else:
+            print(f"Warning: Could not read frame at {i / fps:.2f} seconds")
+    cap.release()
+    return frames
 
 
 def encode_frame_to_base64(frame):
@@ -338,6 +355,8 @@ allfiles = glob.glob(INPUT_PATH + '*.mp4')
 
 # Process each video file one-by-one
 for video_path in allfiles:
+    if os.path.exists(OUTPUT_PATH + video_path.split('/')[-1][:-4] + 'event_log.csv'):  # CHANGE for euro / champions / europa / world cup
+        pass
     # Extract frames from the video
     #frames = extract_frame_by_frame(video_path) # old/superseded code
     frames = extract_frames_by_seconds(video_path)

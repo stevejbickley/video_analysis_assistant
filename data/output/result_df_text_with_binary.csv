@@ -1,0 +1,12 @@
+index,present,reasoning
+False_Connection,True,"The article juxtaposes scientific debate and political oversight without clarifying the underlying scientific consensus versus some expert opinions, potentially misleading readers about the current scientific understanding."
+Misleading_Content,True,"The article focuses on debates and controversies without highlighting the scientific consensus articulated in the original study, which may lead to misconceptions about the findings."
+False_Context,True,"The news article quotes Robert Garry out of context, implying disagreement when the original correspondence does not suggest consensus on a laboratory origin."
+Fabrication,False,There is no evidence of fabricated facts; the article mostly reports statements made during a hearing.
+Satire_or_Parody,False,There is no use of humor or satire intended to mimic news for comedic effect in the article.
+Manipulation,True,There is a manipulation of information flow by focusing on contested opinions without adequately referencing the foundational research dismissing lab-origin theories.
+Propaganda,False,The article does not show clear signs of deliberately promoting a specific ideology or agenda using emotional appeal over factual reporting.
+Biased,True,"The article presents an implied bias by giving almost equal weight to all sides of the debate, despite the scientific community largely dismissing the lab-origin theory."
+Inaccurate_Information,False,The specifics of the case timeline and the basic facts about hearings and statements are accurately reported.
+Unsubstantiated_Claims,True,The article presents theories on origin without substantial backing or clarification of supporting evidence.
+Exaggeration,False,"The language used isn't hyperbolic or sensationalist, though the focus on disputable points without adequate supporting context could be misleading."
