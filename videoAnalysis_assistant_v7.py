@@ -59,12 +59,96 @@ def wait_on_run(run, thread_id):
     return run
 
 
-def extract_audio(video_path, output_audio_path='output_audio.wav'):
+def extract_audio(video_path, output_audio_path='output_audio.mp3', save=True):
     """
     Extracts audio from the given MPEG-4 video file.
+    If save is True, saves the audio to the specified output path.
+    If save is False, returns the audio file as an MP3 in-memory file.
     """
-    ffmpeg.input(video_path).output(output_audio_path).run()
-    return output_audio_path
+    if save: # Run ffmpeg to extract audio and save to file if save is True
+        ffmpeg.input(video_path).output(output_audio_path, format='mp3').run()
+        return output_audio_path
+    else:
+        # Extract audio to an in-memory buffer
+        output, stderr = (
+            ffmpeg
+            .input(video_path)
+            .output('pipe:', format='wav')
+            .run(capture_stdout=True)
+        )
+        # If there was an error then print it
+        if stderr:
+            print("FFmpeg encountered the following warnings/errors:", stderr.decode())
+        # Convert WAV to MP3 using pydub
+        audio = AudioSegment.from_wav(io.BytesIO(output))
+        mp3_io = io.BytesIO()
+        audio.export(mp3_io, format="mp3")
+        mp3_io.seek(0)  # Reset the pointer to the start of the file
+        return mp3_io
+
+
+def transcribe_audio(video_path, segment_timing=True):
+    # Assume mp3_io is returned from your extract_audio function with save=False
+    mp3_io = extract_audio(video_path, save=False)
+    # Reset the file pointer to the beginning
+    mp3_io.seek(0)
+    # Set a filename (as the API expects an actual filename, even when using an in-memory object)
+    mp3_io.name = "audio.mp3"  # Set a name attribute for the in-memory BytesIO object
+    # Transcribe the in-memory MP3 file using the Whisper API
+    if segment_timing:
+        transcription = client.audio.transcriptions.create(
+            model = "whisper-1",
+            file=mp3_io,
+            response_format="verbose_json",
+            prompt="Hello, welcome to my lecture." # Sometimes the model might skip punctuation in the transcript
+        )
+    else:
+        transcription = client.audio.transcriptions.create(
+            model="whisper-1",
+            file=mp3_io,
+            response_format="verbose_json",
+            prompt="Hello, welcome to my lecture.",  # Sometimes the model might skip punctuation in the transcript
+            timestamp_granularities = ["word"]  # Defaults to segment
+        )
+    # Finally, return the transcribe object
+    return transcription
+
+def extract_segments(transcription, full_report=False):
+    """
+    Extracts the segments from the transcription and returns a structured dataframe.
+    Args:
+    - transcription: A dictionary containing the transcription result including the segments.
+    Returns:
+    - A pandas DataFrame containing the segment ID, start time, end time, and text.
+    """
+    segments = transcription.segments
+    # Extract relevant information from each segment
+    data = []
+    for segment in segments:
+        if full_report:
+            data.append({
+                'id': segment['id'],
+                'seek': segment['seek'],
+                'start': segment['start'],
+                'end': segment['end'],
+                'text': segment['text'],
+                'tokens': segment['tokens'],
+                'temperature': segment['temperature'],
+                'avg_logprob': segment['avg_logprob'],
+                'compression_ratio': segment['compression_ratio'],
+                'no_speech_prob': segment['no_speech_prob']
+            })
+        else:
+            data.append({
+                'id': segment['id'],
+                'start': segment['start'],
+                'end': segment['end'],
+                'text': segment['text']
+            })
+    # Create a DataFrame from the extracted data
+    df = pd.DataFrame(data)
+    return df
+
 
 
 def frame_by_frame_save(video_path, output_frames_dir='frames'):
@@ -250,7 +334,10 @@ def analyze_frames_with_openai_jsonSchema(prepared_frames, prompt, api_key, mode
         "Content-Type": "application/json",
         "Authorization": f"Bearer {api_key}"
     }
-    messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
+    messages = [
+        # {"role": "system","content": "You are generating a transcript summary. Create a summary of the provided transcription. Respond in Markdown."},
+        {"role": "user", "content": [{"type": "text", "text": prompt}]}
+    ]
     for frame in prepared_frames:
         messages[0]["content"].append({
             "type": "image_url",
@@ -293,7 +380,10 @@ def analyze_frames_with_openai_sdk(prepared_frames, prompt, api_key, model="gpt-
         "Content-Type": "application/json",
         "Authorization": f"Bearer {api_key}"
     }
-    messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
+    messages = [
+        #{"role": "system","content": "You are generating a transcript summary. Create a summary of the provided transcription. Respond in Markdown."},
+        {"role": "user", "content": [{"type": "text", "text": prompt}]}
+    ]
     for frame in prepared_frames:
         messages[0]["content"].append({
             "type": "image_url",
@@ -317,7 +407,7 @@ def analyze_frames_with_openai_sdk(prepared_frames, prompt, api_key, model="gpt-
     return response.json()
 
 
-def analyze_frames_with_openai(prepared_frames, prompt, api_key, model="gpt-4o-mini"): # model = "gpt-4o-2024-08-06"
+def analyze_frames_with_openai(prepared_frames, transcription, prompt, api_key, model="gpt-4o-mini"): # model = "gpt-4o-2024-08-06"
     """
     Analyzes the prepared frames with OpenAI's API and returns a structured event log.
     """
@@ -325,7 +415,10 @@ def analyze_frames_with_openai(prepared_frames, prompt, api_key, model="gpt-4o-m
         "Content-Type": "application/json",
         "Authorization": f"Bearer {api_key}"
     }
-    messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
+    messages = [
+        {"role": "user", "content": [{"type": "text", "text": prompt}]},
+        {"type": "text", "text": f"The audio transcription is: {transcription.text}"}
+    ]
     for frame in prepared_frames:
         messages[0]["content"].append({
             "type": "image_url",
@@ -413,7 +506,7 @@ def check_if_all_arrays_sum_to_zero(frames):
 allfiles = glob.glob(INPUT_PATH + '*.mp4')
 
 # Process each video file one-by-one
-for video_path in allfiles[0]:
+for video_path in allfiles:
     if os.path.exists(OUTPUT_PATH + video_path.split('/')[-1][:-4] + 'event_log.csv'):  # CHANGE for euro / champions / europa / world cup
         continue
     # Extract frames from the video
@@ -428,7 +521,7 @@ for video_path in allfiles[0]:
                 print('Video file path failed to extract frames: ' + video_path)
                 continue
     # Prompt for OpenAI API
-    prompt = "Please review the images and then provide me a full historical action/activity/event log of everything that happens at each time stamp in a structured table as well as scene/background context too, including any behavioural nudge, device, or moral suasion used."
+    prompt = "These are frames from a video that I just watched. Generate a full historical action/activity/event log of everything that happens at each time stamp in a structured table as well as scene/background context too, including any behavioural nudge, device, or moral suasion used."
     # Generate the event log
     try:
         event_log = generate_event_log_or_storyboard_structuredOutput(frames, prompt, os.environ['OPENAI_API_KEY'], model="gpt-4o-2024-08-06") # Output columns: ["timestamp", "activity_event_action", "scene_background_context", "behavioural_nudge_device_or_moral_suasion"]
