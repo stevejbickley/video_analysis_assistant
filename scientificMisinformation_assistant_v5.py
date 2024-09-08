@@ -111,156 +111,178 @@ json_schema = {
         "False_Connection": {
             "type": "object",
             "properties": {
-                "present": {
-                    "type": "boolean",
-                    "description": "Indicate whether there is a false connection present in the news article (Yes/No)."
+                "level": {
+                    "type": "integer",
+                    "description": f"Indicate the valence or level (0-10) for the '{bias}' bias or heuristic.",
+                    "minimum": 0,
+                    "maximum": 10
                 },
                 "reasoning": {
                     "type": "string",
                     "description": "Provide reasoning or justification for the presence or absence of a false connection."
                 }
             },
-            "required": ["present", "reasoning"], "additionalProperties": False
+            "required": ["level", "reasoning"], "additionalProperties": False
         },
         "Misleading_Content": {
             "type": "object",
             "properties": {
-                "present": {
-                    "type": "boolean",
-                    "description": "Indicate whether there is misleading content present in the news article (Yes/No)."
+                "level": {
+                    "type": "integer",
+                    "description": f"Indicate the valence or level (0-10) for the '{bias}' bias or heuristic.",
+                    "minimum": 0,
+                    "maximum": 10
                 },
                 "reasoning": {
                     "type": "string",
                     "description": "Provide reasoning or justification for the presence or absence of misleading content."
                 }
             },
-            "required": ["present", "reasoning"], "additionalProperties": False
+            "required": ["level", "reasoning"], "additionalProperties": False
         },
         "False_Context": {
             "type": "object",
             "properties": {
-                "present": {
-                    "type": "boolean",
-                    "description": "Indicate whether there is false context present in the news article (Yes/No)."
+                "level": {
+                    "type": "integer",
+                    "description": f"Indicate the valence or level (0-10) for the '{bias}' bias or heuristic.",
+                    "minimum": 0,
+                    "maximum": 10
                 },
                 "reasoning": {
                     "type": "string",
                     "description": "Provide reasoning or justification for the presence or absence of false context."
                 }
             },
-            "required": ["present", "reasoning"], "additionalProperties": False
+            "required": ["level", "reasoning"], "additionalProperties": False
         },
         "Fabrication": {
             "type": "object",
             "properties": {
-                "present": {
-                    "type": "boolean",
-                    "description": "Indicate whether there is fabrication present in the news article (Yes/No)."
+                "level": {
+                    "type": "integer",
+                    "description": f"Indicate the valence or level (0-10) for the '{bias}' bias or heuristic.",
+                    "minimum": 0,
+                    "maximum": 10
                 },
                 "reasoning": {
                     "type": "string",
                     "description": "Provide reasoning or justification for the presence or absence of fabrication."
                 }
             },
-            "required": ["present", "reasoning"], "additionalProperties": False
+            "required": ["level", "reasoning"], "additionalProperties": False
         },
         "Satire_or_Parody": {
             "type": "object",
             "properties": {
-                "present": {
-                    "type": "boolean",
-                    "description": "Indicate whether there is satire or parody present in the news article (Yes/No)."
+                "level": {
+                    "type": "integer",
+                    "description": f"Indicate the valence or level (0-10) for the '{bias}' bias or heuristic.",
+                    "minimum": 0,
+                    "maximum": 10
                 },
                 "reasoning": {
                     "type": "string",
                     "description": "Provide reasoning or justification for the presence or absence of satire or parody."
                 }
             },
-            "required": ["present", "reasoning"], "additionalProperties": False
+            "required": ["level", "reasoning"], "additionalProperties": False
         },
         "Manipulation": {
             "type": "object",
             "properties": {
-                "present": {
-                    "type": "boolean",
-                    "description": "Indicate whether there is manipulation present in the news article (Yes/No)."
+                "level": {
+                    "type": "integer",
+                    "description": f"Indicate the valence or level (0-10) for the '{bias}' bias or heuristic.",
+                    "minimum": 0,
+                    "maximum": 10
                 },
                 "reasoning": {
                     "type": "string",
                     "description": "Provide reasoning or justification for the presence or absence of manipulation."
                 }
             },
-            "required": ["present", "reasoning"], "additionalProperties": False
+            "required": ["level", "reasoning"], "additionalProperties": False
         },
         "Propaganda": {
             "type": "object",
             "properties": {
-                "present": {
-                    "type": "boolean",
-                    "description": "Indicate whether there is propaganda present in the news article (Yes/No)."
+                "level": {
+                    "type": "integer",
+                    "description": f"Indicate the valence or level (0-10) for the '{bias}' bias or heuristic.",
+                    "minimum": 0,
+                    "maximum": 10
                 },
                 "reasoning": {
                     "type": "string",
                     "description": "Provide reasoning or justification for the presence or absence of propaganda."
                 }
             },
-            "required": ["present", "reasoning"], "additionalProperties": False
+            "required": ["level", "reasoning"], "additionalProperties": False
         },
         "Biased": {
             "type": "object",
             "properties": {
-                "present": {
-                    "type": "boolean",
-                    "description": "Indicate whether there is bias present in the news article (Yes/No)."
+                "level": {
+                    "type": "integer",
+                    "description": f"Indicate the valence or level (0-10) for the '{bias}' bias or heuristic.",
+                    "minimum": 0,
+                    "maximum": 10
                 },
                 "reasoning": {
                     "type": "string",
                     "description": "Provide reasoning or justification for the presence or absence of bias."
                 }
             },
-            "required": ["present", "reasoning"], "additionalProperties": False
+            "required": ["level", "reasoning"], "additionalProperties": False
         },
         "Inaccurate_Information": {
             "type": "object",
             "properties": {
-                "present": {
-                    "type": "boolean",
-                    "description": "Indicate whether there is inaccurate information present in the news article (Yes/No)."
+                "level": {
+                    "type": "integer",
+                    "description": f"Indicate the valence or level (0-10) for the '{bias}' bias or heuristic.",
+                    "minimum": 0,
+                    "maximum": 10
                 },
                 "reasoning": {
                     "type": "string",
                     "description": "Provide reasoning or justification for the presence or absence of inaccurate information."
                 }
             },
-            "required": ["present", "reasoning"], "additionalProperties": False
+            "required": ["level", "reasoning"], "additionalProperties": False
         },
         "Unsubstantiated_Claims": {
             "type": "object",
             "properties": {
-                "present": {
-                    "type": "boolean",
-                    "description": "Indicate whether there are unsubstantiated claims present in the news article (Yes/No)."
+                "level": {
+                    "type": "integer",
+                    "description": f"Indicate the valence or level (0-10) for the '{bias}' bias or heuristic.",
+                    "minimum": 0,
+                    "maximum": 10
                 },
                 "reasoning": {
                     "type": "string",
                     "description": "Provide reasoning or justification for the presence or absence of unsubstantiated claims."
                 }
             },
-            "required": ["present", "reasoning"], "additionalProperties": False
+            "required": ["level", "reasoning"], "additionalProperties": False
         },
         "Exaggeration": {
             "type": "object",
             "properties": {
-                "present": {
-                    "type": "boolean",
-                    "description": "Indicate whether there is exaggeration present in the news article (Yes/No)."
+                "level": {
+                    "type": "integer",
+                    "description": f"Indicate the valence or level (0-10) for the '{bias}' bias or heuristic.",
+                    "minimum": 0,
+                    "maximum": 10
                 },
                 "reasoning": {
                     "type": "string",
                     "description": "Provide reasoning or justification for the presence or absence of exaggeration."
                 }
             },
-            "required": ["present", "reasoning"], "additionalProperties": False
+            "required": ["level", "reasoning"], "additionalProperties": False
         }
     },
     "required": [
@@ -299,12 +321,12 @@ def analyze_misinformation_with_texts(news_article, scientific_article, api_key,
     }
     prompt = (
         f"Given the original scientific article: {scientific_article}\n\n"
-        f"and the following news article: {news_article}\n\n"
-        f"Identify and categorize any misinformation present in the news article according to the following typology:\n\n"
+        f"and the following news/media article: {news_article}\n\n"
+        f"Identify and categorize any misinformation present in the news/media article according to the following typology:\n\n"
         f"False Connection, Misleading Content, False Context, Fabrication, "
         f"Satire or Parody, Manipulation, Propaganda, Biased, Inaccurate Information, "
         f"Unsubstantiated Claims, Exaggeration.\n\n"
-        f"For each category, provide a binary response (Yes/No) to indicate whether this type of misinformation is present, "
+        f"For each category, evaluate the presence and valence or level (0-10) of the misinformation evident in the news/media article, "
         f"and provide a justification or reasoning for your assessment."
     )
     payload = {
@@ -351,7 +373,7 @@ def analyze_misinformation_with_files_completionsAPI(original_pdf_path, media_pd
         f"False Connection, Misleading Content, False Context, Fabrication, "
         f"Satire or Parody, Manipulation, Propaganda, Biased, Inaccurate Information, "
         f"Unsubstantiated Claims, Exaggeration.\n\n"
-        f"For each category, provide a binary response (Yes/No) to indicate whether this type of misinformation is present, "
+        f"For each category, evaluate the presence and valence or level (0-10) of the misinformation evident in the news/media article, "
         f"and provide a justification or reasoning for your assessment."
     )
     headers = {
@@ -397,25 +419,32 @@ def analyze_misinformation_with_files_assistantsAPI(client, original_pdf_path, m
         f"False Connection, Misleading Content, False Context, Fabrication, "
         f"Satire or Parody, Manipulation, Propaganda, Biased, Inaccurate Information, "
         f"Unsubstantiated Claims, Exaggeration.\n\n"
-        f"For each category, provide a binary response (Yes/No) to indicate whether this type of misinformation is present, "
+        f"For each category, evaluate the presence and valence or level (0-10) of the misinformation evident in the news/media article, "
         f"and provide a justification or reasoning for your assessment."
     )
+
+    "type": "integer",
+    "description": f"Indicate the valence or level (0-10) for the '{bias}' bias or heuristic.",
+    "minimum": 0,
+    "maximum": 10
+
+
     # Add final instructions if formatted_response is "yes"
     if formatted_response.lower() == "yes":
         prompt += (
             "\n\nLet's think step by step. Please review the entire prompt carefully, and provide your response in the following JSON format:\n"
             "{\n"
-            "  \"False_Connection\": {\"present\": boolean, \"reasoning\": string},\n"
-            "  \"Misleading_Content\": {\"present\": boolean, \"reasoning\": string},\n"
-            "  \"False_Context\": {\"present\": boolean, \"reasoning\": string},\n"
-            "  \"Fabrication\": {\"present\": boolean, \"reasoning\": string},\n"
-            "  \"Satire_or_Parody\": {\"present\": boolean, \"reasoning\": string},\n"
-            "  \"Manipulation\": {\"present\": boolean, \"reasoning\": string},\n"
-            "  \"Propaganda\": {\"present\": boolean, \"reasoning\": string},\n"
-            "  \"Biased\": {\"present\": boolean, \"reasoning\": string},\n"
-            "  \"Inaccurate_Information\": {\"present\": boolean, \"reasoning\": string},\n"
-            "  \"Unsubstantiated_Claims\": {\"present\": boolean, \"reasoning\": string},\n"
-            "  \"Exaggeration\": {\"present\": boolean, \"reasoning\": string}\n"
+            "  \"False_Connection\": {\"level\": integer from 0 to 10, \"reasoning\": string},\n" 
+            "  \"Misleading_Content\": {\"level\": integer from 0 to 10, \"reasoning\": string},\n"
+            "  \"False_Context\": {\"level\": integer from 0 to 10, \"reasoning\": string},\n"
+            "  \"Fabrication\": {\"level\": integer from 0 to 10, \"reasoning\": string},\n"
+            "  \"Satire_or_Parody\": {\"level\": integer from 0 to 10, \"reasoning\": string},\n"
+            "  \"Manipulation\": {\"level\": integer from 0 to 10, \"reasoning\": string},\n"
+            "  \"Propaganda\": {\"level\": integer from 0 to 10, \"reasoning\": string},\n"
+            "  \"Biased\": {\"level\": integer from 0 to 10, \"reasoning\": string},\n"
+            "  \"Inaccurate_Information\": {\"level\": integer from 0 to 10, \"reasoning\": string},\n"
+            "  \"Unsubstantiated_Claims\": {\"level\": integer from 0 to 10, \"reasoning\": string},\n"
+            "  \"Exaggeration\": {\"level\": integer from 0 to 10, \"reasoning\": string}\n"
             "}\n"
         )
     # Step 4: Create a thread with the assistant and attach the files
@@ -528,6 +557,17 @@ def analyze_misinformation_output(result):
     return {}
 
 
+def save_response_outputs(response, filename='placeholder', selected_columns=['id','object','created','model','usage']):
+    # Ensure that only dictionaries are processed
+    filtered_data = [list([column, response[column]]) for column in selected_columns]
+    # Convert the filtered data into a pandas DataFrame
+    event_log_details = pd.DataFrame(filtered_data)
+    # Save to CSV
+    event_log_details.to_csv(OUTPUT_PATH + filename + '_metadata.csv', index=False)
+    # Save to CSV
+    pd.DataFrame.from_dict(response['choices']).to_csv(OUTPUT_PATH + filename + '_detailedResponse.csv', index=False)
+
+
 # Example usage with_texts
 news_article = "Example news article text..."
 #news_article = "Sen. Maggie Hassan, D-N.H., asked whether more safeguards should be put in place on U.S. research grants to gain more insight into how they are being used. Sen. Maggie Hassan, D-N.H., asked whether more safeguards should be put in place on U.S. research grants to gain more insight into how they are being used. SAMUEL CORUM / Getty Images Sponsor Message Get the latest on need-to-know topics for federal employees delivered to your inbox. email Enter your email View Privacy Policy Stay Connected Sponsor Message Featured eBooks Delivering for America: Stamped for Approval or Return to Sender? Cyber Workforce Missile Defense Insights & Reports Fortifying the Force: Robust Resilience in Military Installations Presented By Gordian News Scientists argue over the origins of COVID-19 before Senate panel Microbiology and biodefense experts continued to wrangle over whether COVID-19 emerged from a laboratory leak or was passed to humans through exposure from another animal. June 20, 2024 Homeland Security By Jennifer Shutt Missouri Independent Scientists debated the origins of COVID-19 on Tuesday, trading barbs over whether the bulk of evidence available points to a natural spillover event from a wild animal or a virus designed in a lab and then let loose through an inadvertent leak. The hearing in front of the Senate Homeland Security and Governmental Affairs Committee was part of ongoing efforts in Congress to apply the lessons learned during the pandemic to prevent or blunt the next outbreak. Gregory Koblentz, associate professor and director of the Biodefense Graduate Program at George Mason University in Virginia, said during the two-hour hearing that debate continues in the scientific community about the origins. “The possibility that SARS-CoV-2 was deliberately developed as a biological weapon has been unanimously rejected by all U.S. intelligence agencies,” Koblentz testified. “While the intelligence community is divided on the origin of the pandemic, most of the agencies have determined that the virus was not genetically engineered.” Residents in Wuhan, China, were first diagnosed with “an atypical pneumonia-like illness” in December 2019, according to a COVID-19 timeline from the Centers for Disease Control and Prevention. Initial cases all appeared linked to the Huanan Seafood Wholesale Market at the time, though there has since been much speculation about the types of research taking place at the Wuhan Institute of Virology. Koblentz said he believes the available evidence points to a spillover event from an animal, though he added a “research-related accident can’t be ruled out at this time.” The lack of transparency and data from the Chinese government has significantly hindered scientists’ efforts to unify around the origin of COVID-19, he said. Scientists battle over lab vs. spillover Richard Ebright, board of governors professor of chemistry and chemical biology and laboratory director at the Waksman Institute of Microbiology at Rutgers University in New Jersey, testified he believes a “large preponderance of evidence indicates SARS-CoV-2, the virus that causes COVID-19, entered humans through a research incident.” Ebright also leveled criticism at fellow panelist Robert Garry, who, along with a handful of co-authors, published an opinion article in the journal Nature Medicine in March 2020, titled “The proximal origin of SARS-CoV-2.” In the commentary, Garry and the other scientists wrote, “we do not believe that any type of laboratory-based scenario is plausible.” Ebright said during Tuesday’s hearing that the opinion article represented “scientific misconduct up to and including fraud,” a characterization that Garry rejected during the hearing. “The authors were stating their opinion, but that opinion was not well-founded,” Ebright said. “In March of 2020, there was no basis to state that as a conclusion, as opposed to simply being a hypothesis.” Garry, professor and associate dean of the School of Medicine at Tulane University in Louisiana, argued on behalf of the spillover event during the hearing, testifying that the virus likely didn’t move directly from a bat to humans, but went to an unidentified intermediary animal. “The bat coronaviruses are viruses that are spread by the gastrointestinal route,” Garry said. “For a virus like this to become a respiratory virus — it’s just going to require too many mutations, too many changes for a bat virus to spill directly over to a human being. That could only really happen in nature with replication through an intermediate animal.” Garry also defended gain-of-function research during the hearing, arguing that it has had some beneficial impact, though he noted that it does need “appropriate safeguards and restrictions.” Lawmakers and pundits have used several, often evolving, definitions for gain-of-function research in the wake of the COVID-19 pandemic. The American Society for Microbiology defines it as techniques “used in research to alter the function of an organism in such a way that it is able to do more than it used to do.” When research is “responsibly performed” on highly transmissible and pathogenic viruses, it can lead to advances in public health and national security, Garry testified. “Without gain-of-function research, we’d have no Tamiflu. Without gain-of-function research, we wouldn’t have a vaccine to prevent cancer caused by infection by the human papilloma virus,” Garry said. “And without gain-of-function research, we won’t be able to identify how novel viruses infect us. And if we don’t know how they infect us, we cannot develop appropriate treatments and cures for the next potential pandemic creating virus.” Oversight of funding, research Sen. Maggie Hassan, D-N.H., raised several questions about whether there’s enough oversight of how the United States spends research dollars as well as what mechanisms are in place to monitor how private entities conduct certain types of research. “While their research has the potential to cure diseases and boost our economy, unless they accept federal funding, there is very little federal oversight to ensure that private labs are engaged in safe and ethical research,” she said. Koblentz from George Mason University said there is much less oversight of biosafety and biosecurity for private research facilities that don’t receive federal funding. “In order to expand the scope of oversight to all privately funded research, [it] would require legislative action,” Koblentz said. Congress, he said, should establish a national bio-risk management agency that would have authority over biosafety and biosecurity “regardless of the source of funding.” “At the end of the day, it shouldn’t matter where the funding comes from in terms of making sure this research is being done safely, securely and responsibly,” Koblentz said. Sen. Rand Paul, R-Ky., ranking member on the committee, said the panel will hold an upcoming hearing specifically on gain-of-function research, including what steps Congress should take to ensure it doesn’t put the public at risk. The next pandemic Committee Chairman Gary Peters, D-Mich., said during the hearing that lawmakers “must learn from the challenges faced during this pandemic to ensure we can better protect Americans from future potential biological incidents.” “Our government needs the flexibility to determine the origins of naturally occurring outbreaks, as well as potential outbreaks that could arise from mistakes or malicious intent,” Peters said. Sen. Mitt Romney, R-Utah, after listening to some of the debate, expressed exasperation that so much attention is going toward what caused the last pandemic and not on how to prepare for the next one. “Given the fact that it could have been either, we know what action we ought to take to protect from either,” Romney said. “And so why there’s so much passion around that makes me think it’s more political than scientific, but maybe I’m wrong.” The United States, he said, shouldn’t be funding gain-of-function research and should “insist” that anyone who receives federal funding follow the standards of the International Organization for Standardization. Missouri Independent is part of States Newsroom, a nonprofit news network supported by grants and a coalition of donors as a 501c(3) public charity. Missouri Independent maintains editorial independence. Contact Editor Jason Hancock for questions: info@missouriindependent.com. Follow Missouri Independent on Facebook and X. Share This:"
@@ -540,6 +580,7 @@ result_df = parse_response_content(result['choices'][0]['message']['content'])
 
 # Save to CSV
 result_df.to_csv(OUTPUT_PATH + 'result_df_with_texts.csv', index=False)
+save_response_outputs(result, filename='result_df_with_texts')
 
 # Print the categorized misinformation
 print(result)
@@ -566,6 +607,7 @@ result2_df = pd.DataFrame.from_dict(extracted_json)
 
 # Save to CSV
 result2_df.to_csv(OUTPUT_PATH + 'result_df_with_files.csv', index=False)
+save_response_outputs(result2, filename='result_df_with_files')
 
 # Print the categorized misinformation
 print(result2)
