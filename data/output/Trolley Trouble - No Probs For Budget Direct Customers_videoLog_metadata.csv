@@ -1,6 +1,3 @@
-0,1
-id,chatcmpl-A4FaUdnkMl9jslZPKYAfmDtlw2YaI
-object,chat.completion
-created,1725576594
-model,gpt-4o-2024-08-06
-usage,"{'prompt_tokens': 11968, 'completion_tokens': 4273, 'total_tokens': 16241}"
+version https://git-lfs.github.com/spec/v1
+oid sha256:46a8b147d4878a8d83e2b9de3b8d5c01dcd6c649e0367d3796e0cef7fc3fe2db
+size 195
