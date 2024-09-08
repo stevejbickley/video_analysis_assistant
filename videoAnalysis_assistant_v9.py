@@ -381,7 +381,7 @@ def analyze_frames_with_openai_jsonSchema(prepared_frames, transcription, prompt
         "max_tokens": 1000
     }
     response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
-    return response.json()
+    return response.json(), messages
 
 
 
@@ -429,7 +429,7 @@ def analyze_frames_with_openai_sdk(prepared_frames, transcription, prompt, api_k
         "max_tokens": 1000
     }
     response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
-    return response.json()
+    return response.json(), messages
 
 
 def analyze_frames_with_openai(prepared_frames, transcription, prompt, api_key, model="gpt-4o-mini"): # model = "gpt-4o-2024-08-06"
@@ -456,19 +456,19 @@ def analyze_frames_with_openai(prepared_frames, transcription, prompt, api_key, 
     payload = {
         "model": model,
         "messages": messages,
-        "max_tokens": 1000
+        "max_tokens": 2000
     }
     response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
-    return response.json()
+    return response.json(), messages
 
 
 
-def generate_event_log_or_storyboard_unstructured(frames, prompt, api_key, model="gpt-4o-mini"):
+def generate_event_log_or_storyboard_unstructured(pathname, filename, frames, prompt, api_key, model="gpt-4o-mini"):
     """
     Generates an event log or storyboard based on the video frames and the given prompt.
     """
     prepared_frames = prepare_frames_for_api(frames)
-    response = analyze_frames_with_openai(prepared_frames, prompt, api_key, model)
+    response, messages = analyze_frames_with_openai(prepared_frames, prompt, api_key, model)
     event_log = []
     # Parse the response to extract and structure the event log/storyboard
     for i, frame in enumerate(prepared_frames):
@@ -477,6 +477,8 @@ def generate_event_log_or_storyboard_unstructured(frames, prompt, api_key, model
             "Timestamp": f"{frame['timestamp']:.1f}s",
             "Description": event_description
         })
+    # Save to CSV
+    pd.DataFrame(messages).to_csv(OUTPUT_PATH + pathname.split('/')[-1][:-4] + '_' + filename + '_inputMessages_generateStoryboard.csv', index=False)
     return event_log
 
 
@@ -499,16 +501,18 @@ def parse_response_content(content):
     return df
 
 
-def generate_event_log_or_storyboard_structuredOutput(video_path, frames, transcription, prompt, api_key, model="gpt-4o-mini"):
+def generate_event_log_or_storyboard_structuredOutput(video_path, filename, frames, transcription, prompt, api_key, model="gpt-4o-mini"):
     """
     Generates an event log or storyboard based on the video frames and the given prompt.
     """
     prepared_frames = prepare_frames_for_api(frames)
-    response = analyze_frames_with_openai_sdk(prepared_frames, transcription, prompt, api_key, model)
+    response, messages = analyze_frames_with_openai_sdk(prepared_frames, transcription, prompt, api_key, model)
     #response = analyze_frames_with_openai_jsonSchema(prepared_frames, transcription, prompt, api_key, model)
     event_log = parse_response_content(response['choices'][0]['message']['content'])
     # Save the response details to CSV
     save_response_outputs(response, video_path, filename='videoLog')
+    # Save to CSV
+    pd.DataFrame(messages).to_csv(OUTPUT_PATH + video_path.split('/')[-1][:-4] + '_' + filename + '_inputMessages_generateStoryboard.csv', index=False)
     return event_log
 
 
@@ -1294,7 +1298,7 @@ def evaluate_biases_json_schema(videoLog_df, audioLog_df, biases_heuristics, api
         "max_tokens": 6000
     }
     response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
-    return response.json()
+    return response.json(), messages
 
 
 ##### ------ DEFINE FUNCTIONS - END ------- ####
@@ -1343,19 +1347,21 @@ for video_path in allfiles:
     transcription = transcription[["id", "start", "end", "text"]]
     # Generate the event log
     try:
-        event_log = generate_event_log_or_storyboard_structuredOutput(video_path, frames, transcription, prompt, os.environ['OPENAI_API_KEY'], model="gpt-4o-2024-08-06") # Output columns: ["timestamp", "activity_event_action", "scene_background_context", "behavioural_nudge_device_or_moral_suasion"]
+        event_log = generate_event_log_or_storyboard_structuredOutput(video_path, 'videoLog', frames, transcription, prompt, os.environ['OPENAI_API_KEY'], model="gpt-4o-2024-08-06") # Output columns: ["timestamp", "activity_event_action", "scene_background_context", "behavioural_nudge_device_or_moral_suasion"]
     except:
         print('Video file path failed to extract event log: '+video_path)
         continue
     # Save to CSV
     event_log.to_csv(OUTPUT_PATH + video_path.split('/')[-1][:-4] + '_videoLog.csv', index=False)
     # Biases log
-    biases_log = evaluate_biases_json_schema(event_log, transcription, biases_heuristics, os.environ['OPENAI_API_KEY'], model="gpt-4o-2024-08-06")
-    biases_log = parse_response_content(json.loads(biases_log['choices'][0]['message']['content']))
+    biases_log, messages = evaluate_biases_json_schema(event_log, transcription, biases_heuristics, os.environ['OPENAI_API_KEY'], model="gpt-4o-2024-08-06")
     # Save the response details to CSV
     save_response_outputs(biases_log, video_path, filename='videoLog')
+    # Parse/clean the output
+    biases_log = parse_response_content(json.loads(biases_log['choices'][0]['message']['content']))
     # Save to biases evaluation to CSV
     biases_log.to_csv(OUTPUT_PATH + video_path.split('/')[-1][:-4] + '_biases.csv', index=False)
-
+    # Save to bias evaluation prompts/messages CSV
+    pd.DataFrame(messages).to_csv(OUTPUT_PATH + video_path.split('/')[-1][:-4] + '_biases_inputMessages_biasesEvaluation.csv',index=False)
 
 # ---- STEP 2)
