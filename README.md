@@ -1,4 +1,4 @@
-### GenAI Media Mapping for Behavioural Comms Insights ###
+# GenAI Media Mapping for Behavioural Comms Insights #
 
 We built a multimodal GenAI pipeline to analyse TV/online ads from Suncorp and competitors, converting raw video into structured evidence about what’s shown/said, how it’s framed, and which cognitive biases are invoked. 
 
